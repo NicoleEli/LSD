@@ -30,11 +30,35 @@ public namespace Lsd
         /// <summary>
         /// Number of whole shillings
         /// </summary>
-        public int Shillings  { get; set; }
+        public int Shillings { get; set; }
         /// <summary>
         /// Number of pennies
         /// </summary>
-        public double Pennies  { get; set; }
+        public double Pennies { get; set; }
+
+        /// <summary>
+        /// Total number of whole shillings represented by this price
+        /// </summary>
+        public int TotalShillings
+        {
+            get 
+            {
+                return Pounds * 20
+                        + Shillings;
+            }
+        }
+        /// <summary>
+        /// Total number of pennies represented by this price
+        /// </summary>
+        public double TotalPennies
+        {
+            get 
+            {
+                return Pounds * 20 * 12
+                        + Shillings * 12
+                        + Pennies;
+            }
+        }
 
         /// <summary>
         /// Create a new <see cref="Price"/> in pounds, shillings and pence
