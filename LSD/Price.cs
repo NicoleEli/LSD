@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-public namespace Lsd
+namespace Lsd
 {
     /// <summary>
     /// A price in £sd currency.
@@ -99,14 +99,14 @@ public namespace Lsd
             pence += (sixpences ?? 0) * 6;
             pence += (threepences ?? 0) * 3;
 
-            double fractionalCoinsTotal = (halfpennies * 0.5) + (farthings * 0.25);
-            int wholePennies = fractionalCoinsTotal / 1;
+            double fractionalCoinsTotal = (halfpennies ?? 0 * 0.5) + (farthings ?? 0 * 0.25);
+            int wholePennies = (int)fractionalCoinsTotal;
             pence += wholePennies;
 
             if (pence > 12)
             {
-                shillings += pence / 12;
-                pence = pence % 12;
+                shillings += (int)pence / 12;
+                pence = (int)pence % 12;
             }
             if (shillings > 20)
             {
