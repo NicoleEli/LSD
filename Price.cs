@@ -54,7 +54,44 @@ public namespace Lsd
                                 int? sixpences = null, int? threepences = null, int? pennies = null, 
                                 int? halfpennies = null, int? farthings = null)
         {
-            throw new NotImplementedException();
+            Pounds = pounds ?? 0;
+            Shillings = shillings ?? 0;
+            Pennies = pennies ?? 0;
+
+            Pounds += guineas ?? 0;
+            Shillings += guineas ?? 0;
+
+            Pounds += sovreigns ?? 0;
+
+            Shillings += (halfSovreigns ?? 0) * 10;
+
+            Shillings += (crowns ?? 0) * 5;
+
+            Shillings += (halfCrowns ?? 0) * 2;
+            Pennies += (halfCrowns ?? 0) * 6;
+
+            Shillings += (florins ?? 0) * 2;
+
+            Pennies += (sixpences ?? 0) * 6;
+            Pennies += (threepences ?? 0) * 3;
+
+            double fractionalCoinsTotal = (halfpennies * 0.5) + (farthings * 0.25);
+            int wholePennies = fractionalCoinsTotal / 1;
+            Pennies += wholePennies;
+
+            if (Pennies > 12)
+            {
+                Shillings += Pennies / 12;
+                Pennies = Pennies % 12;
+            }
+            if (Shillings > 20)
+            {
+                Pounds += Shillings / 20;
+                Shillings = Shillings % 20;
+            }
+
+            // add on remaining fractional pennies at the end so they don't get lost in remainder maths
+            Pennies += fractionalCoinsTotal - wholePennies;
         }
 
         public override string ToString()
