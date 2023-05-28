@@ -73,49 +73,51 @@ public namespace Lsd
             Pennies = pennies;
         }
 
-        public Price FromCoins(int? guineas = null, int? pounds = null, int? sovreigns = null, int? halfSovreigns = null,
+        public static Price FromCoins(int? guineas = null, int? pounds = null, int? sovreigns = null, int? halfSovreigns = null,
                                 int? crowns = null, int? halfCrowns = null, int? florins = null, int? shillings = null, 
                                 int? sixpences = null, int? threepences = null, int? pennies = null, 
                                 int? halfpennies = null, int? farthings = null)
         {
-            Pounds = pounds ?? 0;
-            Shillings = shillings ?? 0;
-            Pennies = pennies ?? 0;
+            pounds = pounds ?? 0;
+            shillings = shillings ?? 0;
+            double pence = pennies ?? 0;
 
-            Pounds += guineas ?? 0;
-            Shillings += guineas ?? 0;
+            pounds += guineas ?? 0;
+            shillings += guineas ?? 0;
 
-            Pounds += sovreigns ?? 0;
+            pounds += sovreigns ?? 0;
 
-            Shillings += (halfSovreigns ?? 0) * 10;
+            shillings += (halfSovreigns ?? 0) * 10;
 
-            Shillings += (crowns ?? 0) * 5;
+            shillings += (crowns ?? 0) * 5;
 
-            Shillings += (halfCrowns ?? 0) * 2;
-            Pennies += (halfCrowns ?? 0) * 6;
+            shillings += (halfCrowns ?? 0) * 2;
+            pence += (halfCrowns ?? 0) * 6;
 
-            Shillings += (florins ?? 0) * 2;
+            shillings += (florins ?? 0) * 2;
 
-            Pennies += (sixpences ?? 0) * 6;
-            Pennies += (threepences ?? 0) * 3;
+            pence += (sixpences ?? 0) * 6;
+            pence += (threepences ?? 0) * 3;
 
             double fractionalCoinsTotal = (halfpennies * 0.5) + (farthings * 0.25);
             int wholePennies = fractionalCoinsTotal / 1;
-            Pennies += wholePennies;
+            pence += wholePennies;
 
-            if (Pennies > 12)
+            if (pence > 12)
             {
-                Shillings += Pennies / 12;
-                Pennies = Pennies % 12;
+                shillings += pence / 12;
+                pence = pence % 12;
             }
-            if (Shillings > 20)
+            if (shillings > 20)
             {
-                Pounds += Shillings / 20;
-                Shillings = Shillings % 20;
+                pounds += shillings / 20;
+                shillings = shillings % 20;
             }
 
             // add on remaining fractional pennies at the end so they don't get lost in remainder maths
-            Pennies += fractionalCoinsTotal - wholePennies;
+            pence += fractionalCoinsTotal - wholePennies;
+
+            return new Price(pounds.Value, shillings.Value, pence);
         }
 
         public override string ToString()
