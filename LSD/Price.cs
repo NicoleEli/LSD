@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 
 namespace Lsd
@@ -32,9 +31,9 @@ namespace Lsd
         /// </summary>
         public int Shillings { get; set; }
         /// <summary>
-        /// Number of pennies
+        /// Number of pence
         /// </summary>
-        public double Pennies { get; set; }
+        public double Pence { get; set; }
 
         /// <summary>
         /// Total number of whole shillings represented by this price
@@ -56,7 +55,7 @@ namespace Lsd
             {
                 return Pounds * 20 * 12
                         + Shillings * 12
-                        + Pennies;
+                        + Pence;
             }
         }
 
@@ -65,12 +64,12 @@ namespace Lsd
         /// </summary>
         /// <param name="pounds">Number of whole pounds</param>
         /// <param name="shillings">Number of whole shillings</param>
-        /// <param name="pennies">Number of pennies</param>
-        public Price(int pounds, int shillings, double pennies)
+        /// <param name="pence">Number of pennies</param>
+        public Price(int pounds, int shillings, double pence)
         {
             Pounds = pounds;
             Shillings = shillings;
-            Pennies = pennies;
+            Pence = pence;
         }
 
         public static Price FromCoins(int? guineas = null, int? pounds = null, int? sovreigns = null, int? halfSovreigns = null,
@@ -99,16 +98,16 @@ namespace Lsd
             pence += (sixpences ?? 0) * 6;
             pence += (threepences ?? 0) * 3;
 
-            double fractionalCoinsTotal = (halfpennies ?? 0 * 0.5) + (farthings ?? 0 * 0.25);
+            double fractionalCoinsTotal = ((halfpennies ?? 0) * 0.5) + ((farthings ?? 0) * 0.25);
             int wholePennies = (int)fractionalCoinsTotal;
             pence += wholePennies;
 
-            if (pence > 12)
+            if (pence >= 12)
             {
                 shillings += (int)pence / 12;
                 pence = (int)pence % 12;
             }
-            if (shillings > 20)
+            if (shillings >= 20)
             {
                 pounds += shillings / 20;
                 shillings = shillings % 20;
@@ -126,22 +125,22 @@ namespace Lsd
             if (Pounds > 0)
             {
                 sb.Append($"£{Pounds}");
-                if (Shillings > 0 || Pennies > 0)
+                if (Shillings > 0 || Pence > 0)
                 {
                     var shillings = Shillings > 0 ? Shillings.ToString() : "–";
-                    var pennies = Pennies > 0 ? Pennies.ToString() : "–";
+                    var pennies = Pence > 0 ? Pence.ToString() : "–";
                     sb.Append($"/{shillings}/{pennies}");
                 }
             }
             else if (Shillings > 0)
             {
                 var shillings = Shillings > 0 ? Shillings.ToString() : "–";
-                var pennies = Pennies > 0 ? Pennies.ToString() : "–";
+                var pennies = Pence > 0 ? Pence.ToString() : "–";
                 sb.Append($"/{shillings}/{pennies}");
             }
             else
             {
-                sb.Append($"{Pennies}d.");
+                sb.Append($"{Pence}d.");
             }
             return sb.ToString();
         }
